@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/activity_main.xml" value="0.5714285714285714" />
+        <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/activity_landing.xml" value="0.2857142857142857" />
+        <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/activity_main.xml" value="0.5235008103727715" />
         <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/fragment_login.xml" value="0.2857142857142857" />
         <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/login_fragment.xml" value="0.25625" />
+        <entry key="..\:/workspace2/Foundvio/app/src/main/res/layout/manage_fragment.xml" value="0.2859375" />
+        <entry key="..\:/workspace2/Foundvio/app/src/main/res/menu/landing_bottom_navigation_menu.xml" value="0.28072916666666664" />
       </map>
     </option>
   </component>
