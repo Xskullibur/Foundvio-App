@@ -1,10 +1,16 @@
 package com.foundvio.setup
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.foundvio.model.Trackee
 
 class SetupViewModel: ViewModel() {
 
-    val username = MutableLiveData("")
+    private val _trackees = MutableLiveData<MutableList<Trackee>>(mutableListOf())
+    val trackees: LiveData<MutableList<Trackee>> get() = _trackees
+
+    fun addTrackee(trackee: Trackee){
+        _trackees.value?.add(trackee)
+        _trackees.value = _trackees.value
+    }
 
 }

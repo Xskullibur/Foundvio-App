@@ -1,0 +1,63 @@
+package com.foundvio.setup
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.foundvio.databinding.FragmentAddTrackeeBinding
+import com.foundvio.model.Trackee
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+class AddTrackeeFragment : Fragment() {
+
+    private lateinit var navController: NavController
+
+    private val viewModel: SetupViewModel by activityViewModels()
+
+    private lateinit var adapter: TrackeeAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        start()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentAddTrackeeBinding.inflate(inflater)
+
+        binding.apply {
+            trackeeRecyclerView.layoutManager = LinearLayoutManager(this@AddTrackeeFragment.context)
+            viewModel.trackees.value?.let {
+                adapter = TrackeeAdapter(it)
+                trackeeRecyclerView.adapter = adapter
+            }
+
+            viewModel.trackees.observe(viewLifecycleOwner){
+                adapter.notifyItemRangeChanged(it.size-1, it.size)
+            }
+        }
+
+        return binding.root
+    }
+
+    private fun start(){
+        lifecycleScope.launchWhenCreated {
+            var i = 0
+            while(true){
+                i++
+                viewModel.addTrackee(Trackee("Hello-$i"))
+                delay(1000)
+            }
+        }
+    }
+
+}

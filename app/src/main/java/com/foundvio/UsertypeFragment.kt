@@ -6,13 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.foundvio.databinding.FragmentUsertypeBinding
+import com.foundvio.setup.SetupViewModel
 
 class UsertypeFragment : Fragment() {
 
     private lateinit var navController: NavController
+
+    private val viewModel: SetupViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,7 @@ class UsertypeFragment : Fragment() {
         val binding = FragmentUsertypeBinding.inflate(inflater)
 
         // Caregiver Button
+        binding
         binding.trackerBtn.setOnClickListener {
             // TODO: Caregiver Setup (Navigate to Register)
             navController.navigate(R.id.action_usertypeFragment_to_addTrackeeFragment)

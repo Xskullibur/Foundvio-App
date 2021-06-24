@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/addTrackeeFragment"
-        android:name="com.foundvio.AddTrackeeFragment"
+        android:name="com.foundvio.setup.AddTrackeeFragment"
         android:label="fragment_add_trackee"
         tools:layout="@layout/fragment_add_trackee" />
 </navigation>
