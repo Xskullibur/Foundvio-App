@@ -8,19 +8,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.foundvio.R
 
-class ManageFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     companion object {
         const val ID = 0
     }
 
-    private val viewModel by activityViewModels<ManageViewModel>()
+    private val viewModel by activityViewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.manage_fragment, container, false)
+        return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

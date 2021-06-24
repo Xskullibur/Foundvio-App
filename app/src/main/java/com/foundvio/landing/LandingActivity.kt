@@ -12,8 +12,8 @@ class LandingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLandingBinding
 
-    private var currentFragment: Fragment = ManageFragment()
-    private var currentFragmentId = ManageFragment.ID
+    private var currentFragment: Fragment = HomeFragment()
+    private var currentFragmentId = HomeFragment.ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +24,8 @@ class LandingActivity : AppCompatActivity() {
         binding.apply {
             bottomNavigation.setOnItemSelectedListener{ item ->
                 when(item.itemId){
-                    R.id.manage_menu -> {
-                        switchFragment(ManageFragment())
+                    R.id.home_menu -> {
+                        switchFragment(HomeFragment())
                         true
                     }
                     R.id.social_menu -> {
@@ -39,11 +39,11 @@ class LandingActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            switchFragment(ManageFragment())
+            switchFragment(HomeFragment())
         }else{
             currentFragmentId = savedInstanceState.getInt(LAST_FRAGMENT_ID)
             when(currentFragmentId){
-                ManageFragment.ID -> switchFragment(ManageFragment())
+                HomeFragment.ID -> switchFragment(HomeFragment())
                 SocialFragment.ID -> switchFragment(SocialFragment())
                 else -> -1
             }
@@ -56,7 +56,7 @@ class LandingActivity : AppCompatActivity() {
         this.currentFragment = fragment
 
         currentFragmentId = when(currentFragment){
-            is ManageFragment -> ManageFragment.ID
+            is HomeFragment -> HomeFragment.ID
             is SocialFragment -> SocialFragment.ID
             else -> -1
         }
