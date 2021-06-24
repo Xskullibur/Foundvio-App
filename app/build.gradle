@@ -1,11 +1,18 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+
 
     defaultConfig {
         applicationId "com.foundvio"
@@ -19,11 +26,6 @@ android {
             useSupportLibrary true
         }
     }
-
-    buildFeatures {
-        viewBinding true
-    }
-
 
     buildTypes {
         release {
