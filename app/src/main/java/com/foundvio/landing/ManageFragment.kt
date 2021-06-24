@@ -11,7 +11,7 @@ import com.foundvio.R
 class ManageFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ManageFragment()
+        const val ID = 0
     }
 
     private lateinit var viewModel: ManageViewModel
