@@ -3,11 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/usertypeFragment">
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.foundvio.setup.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/usertypeFragment"
+        android:name="com.foundvio.UsertypeFragment"
+        android:label="fragment_usertype"
+        tools:layout="@layout/fragment_usertype" >
+        <action
+            android:id="@+id/action_usertypeFragment_to_addTrackeeFragment"
+            app:destination="@id/addTrackeeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTrackeeFragment"
+        android:name="com.foundvio.AddTrackeeFragment"
+        android:label="fragment_add_trackee"
+        tools:layout="@layout/fragment_add_trackee" />
 </navigation>
