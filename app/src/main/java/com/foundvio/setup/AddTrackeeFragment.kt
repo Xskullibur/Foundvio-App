@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.foundvio.databinding.FragmentAddTrackeeBinding
 import com.foundvio.model.Trackee
@@ -53,8 +54,12 @@ class AddTrackeeFragment : Fragment() {
 
             trackeeRecyclerView.layoutManager = LinearLayoutManager(this@AddTrackeeFragment.context)
             viewModel.trackees.value?.let {
-                adapter = TrackeeAdapter(it)
+                adapter = TrackeeAdapter(binding, it)
                 trackeeRecyclerView.adapter = adapter
+                val itemTouchHelper = ItemTouchHelper(
+                    TrackeeAdapter.SwipeToDeleteCallback(this@AddTrackeeFragment.requireContext(), adapter)
+                )
+                itemTouchHelper.attachToRecyclerView(trackeeRecyclerView)
             }
 
             viewModel.trackees.observe(viewLifecycleOwner){
