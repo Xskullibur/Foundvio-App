@@ -25,7 +25,6 @@ class AddTrackeeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        start()
     }
 
     override fun onCreateView(
@@ -35,6 +34,11 @@ class AddTrackeeFragment : Fragment() {
         val binding = FragmentAddTrackeeBinding.inflate(inflater)
 
         binding.apply {
+
+            addTrackeeBtn.setOnClickListener {
+                viewModel.addTrackee(Trackee("Hello"))
+            }
+
             trackeeRecyclerView.layoutManager = LinearLayoutManager(this@AddTrackeeFragment.context)
             viewModel.trackees.value?.let {
                 adapter = TrackeeAdapter(it)
@@ -47,17 +51,6 @@ class AddTrackeeFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    private fun start(){
-        lifecycleScope.launchWhenCreated {
-            var i = 0
-            while(true){
-                i++
-                viewModel.addTrackee(Trackee("Hello-$i"))
-                delay(1000)
-            }
-        }
     }
 
 }
