@@ -7,28 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="0dp"
-        app:elevation="0dp"
-        android:background="@android:color/transparent">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:elevation="0dp"-->
+<!--        app:elevation="0dp"-->
+<!--        android:background="@android:color/transparent">-->
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:elevation="0dp"
-            app:elevation="0dp"
-            style="@style/Theme.Foundvio.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_name" />
+<!--        <com.google.android.material.appbar.MaterialToolbar-->
+<!--            android:id="@+id/topAppBar"-->
+<!--            android:elevation="0dp"-->
+<!--            app:elevation="0dp"-->
+<!--            style="@style/Theme.Foundvio.Toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            app:title="@string/app_name" />-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
 
             <androidx.fragment.app.FragmentContainerView
@@ -40,7 +40,7 @@
                 app:navGraph="@navigation/nav_graph">
 
             </androidx.fragment.app.FragmentContainerView>
-    </androidx.core.widget.NestedScrollView>
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
 
