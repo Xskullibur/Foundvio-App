@@ -47,7 +47,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <com.google.android.material.button.MaterialButton
-
+                android:id="@+id/done_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Done" />

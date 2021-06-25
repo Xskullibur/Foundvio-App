@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -37,6 +38,17 @@ class AddTrackeeFragment : Fragment() {
 
             addTrackeeBtn.setOnClickListener {
                 viewModel.addTrackee(Trackee("Hello"))
+            }
+
+            doneBtn.setOnClickListener {
+                viewModel.trackees.value?.let {
+                    if(it.size <= 0){
+                        Toast.makeText(this@AddTrackeeFragment.context,
+                        "Please add a Trackee by click on the plus button", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
             }
 
             trackeeRecyclerView.layoutManager = LinearLayoutManager(this@AddTrackeeFragment.context)
