@@ -1,4 +1,4 @@
-package com.foundvio
+package com.foundvio.setup
 
 import android.app.Activity
 import android.content.Intent
@@ -13,11 +13,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.foundvio.databinding.FragmentLoginBinding
+import com.foundvio.landing.LandingActivity
+import com.foundvio.model.User
+import com.foundvio.service.UserService
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.support.account.AccountAuthManager
 import com.huawei.hms.support.account.request.AccountAuthParams
 import com.huawei.hms.support.account.request.AccountAuthParamsHelper
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     companion object {
@@ -26,6 +32,9 @@ class LoginFragment : Fragment() {
 
     private lateinit var navController: NavController
     private lateinit var launcher: ActivityResultLauncher<Intent>
+
+    @Inject
+    lateinit var userService: UserService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +48,16 @@ class LoginFragment : Fragment() {
                     // The sign-in is successful, and the user's ID information and ID token are obtained.
                     val authAccount = authAccountTask.result
                     Log.i(TAG, "idToken:" + authAccount.idToken)
+
+                    userService.addUser(User().apply {
+                        email = authAccount.email
+                        name = authAccount.givenName
+//                        huaweiToken = authAccount.idToken
+                    })
+
+                    val intent = Intent(this@LoginFragment.requireContext(), LandingActivity::class.java)
+                    startActivity(intent)
+
                 } else {
                     // The sign-in failed. No processing is required. Logs are recorded for fault locating.
                     Log.e(TAG, "sign in failed : " + (authAccountTask.exception as ApiException).statusCode)
@@ -66,10 +85,6 @@ class LoginFragment : Fragment() {
                     .createParams()
                 val service = AccountAuthManager.getService(this@LoginFragment.requireContext(), authParams)
                 launcher.launch(service.signInIntent)
-//                startActivityForResult(service.signInIntent, 8888)
-//                //Temporary start landing activity
-//                val intent = Intent(this@LoginFragment.context, LandingActivity::class.java)
-//                startActivity(intent)
             }
         }
         return binding.root
