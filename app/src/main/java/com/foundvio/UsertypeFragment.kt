@@ -31,7 +31,6 @@ class UsertypeFragment : Fragment() {
         val binding = FragmentUsertypeBinding.inflate(inflater)
 
         // Caregiver Button
-        binding
         binding.trackerBtn.setOnClickListener {
             // TODO: Caregiver Setup (Navigate to Register)
             navController.navigate(R.id.action_usertypeFragment_to_addTrackeeFragment)
@@ -40,6 +39,7 @@ class UsertypeFragment : Fragment() {
         // Elderly Button
         binding.trackeeBtn.setOnClickListener {
             // TODO: Elderly Setup
+            navController.navigate(R.id.action_usertypeFragment_to_trackeeQrFragment)
         }
 
         return binding.root
