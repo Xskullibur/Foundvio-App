@@ -115,6 +115,7 @@ class AddTrackeeFragment : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED -> {
 
                         // Permission Granted (Start Scan)
+                        val activity = activity
                         ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE,
                             HmsScanAnalyzerOptions.Creator().create())
                     }
