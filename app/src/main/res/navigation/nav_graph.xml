@@ -20,10 +20,18 @@
             app:destination="@id/addTrackeeFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_usertypeFragment_to_trackeeQrFragment"
+            app:destination="@id/trackeeQrFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTrackeeFragment"
         android:name="com.foundvio.setup.AddTrackeeFragment"
         android:label="fragment_add_trackee"
         tools:layout="@layout/fragment_add_trackee" />
+    <fragment
+        android:id="@+id/trackeeQrFragment"
+        android:name="com.foundvio.TrackeeQrFragment"
+        android:label="fragment_trackee_qr"
+        tools:layout="@layout/fragment_trackee_qr" />
 </navigation>
