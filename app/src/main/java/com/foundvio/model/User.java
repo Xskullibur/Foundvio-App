@@ -17,50 +17,42 @@ import java.util.Date;
 /**
  * Definition of ObjectType User.
  *
- * @since 2021-06-26
+ * @since 2021-06-28
  */
-@PrimaryKeys({"id"})
+@PrimaryKeys({"displayName"})
 public final class User extends CloudDBZoneObject {
-    private Integer id;
+    private String displayName;
 
     @NotNull
-    @DefaultValue(stringValue = "-")
-    private String name;
-
-    @NotNull
-    @DefaultValue(stringValue = "-")
+    @DefaultValue(stringValue = "NA")
     private String email;
 
     @NotNull
-    @DefaultValue(stringValue = "-")
+    @DefaultValue(stringValue = "NA")
     private String phone;
 
     @NotNull
-    @DefaultValue(stringValue = "-")
-    private String huaweiToken;
+    @DefaultValue(stringValue = "NA")
+    private String givenName;
+
+    @NotNull
+    @DefaultValue(stringValue = "NA")
+    private String familyName;
 
     public User() {
         super(User.class);
-        this.name = "-";
-        this.email = "-";
-        this.phone = "-";
-        this.huaweiToken = "-";
+        this.email = "NA";
+        this.phone = "NA";
+        this.givenName = "NA";
+        this.familyName = "NA";
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public void setEmail(String email) {
@@ -79,12 +71,20 @@ public final class User extends CloudDBZoneObject {
         return phone;
     }
 
-    public void setHuaweiToken(String huaweiToken) {
-        this.huaweiToken = huaweiToken;
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
     }
 
-    public String getHuaweiToken() {
-        return huaweiToken;
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public String getFamilyName() {
+        return familyName;
     }
 
 }

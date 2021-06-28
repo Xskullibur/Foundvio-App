@@ -16,10 +16,14 @@ import com.foundvio.databinding.FragmentLoginBinding
 import com.foundvio.landing.LandingActivity
 import com.foundvio.model.User
 import com.foundvio.service.UserService
+import com.huawei.agconnect.auth.AGConnectAuth
+import com.huawei.agconnect.auth.AGConnectAuthCredential
+import com.huawei.agconnect.auth.HwIdAuthProvider
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.support.account.AccountAuthManager
 import com.huawei.hms.support.account.request.AccountAuthParams
 import com.huawei.hms.support.account.request.AccountAuthParamsHelper
+import com.huawei.hms.support.account.result.AuthAccount
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -47,13 +51,20 @@ class LoginFragment : Fragment() {
                 if (authAccountTask.isSuccessful) {
                     // The sign-in is successful, and the user's ID information and ID token are obtained.
                     val authAccount = authAccountTask.result
+                    val accessToken = authAccount.accessToken
                     Log.i(TAG, "idToken:" + authAccount.idToken)
 
-                    userService.addUser(User().apply {
-                        email = authAccount.email
-                        name = authAccount.givenName
-//                        huaweiToken = authAccount.idToken
-                    })
+                    if(AGConnectAuth.getInstance().currentUser == null){
+                        val credential = HwIdAuthProvider.credentialWithToken(accessToken)
+                        AGConnectAuth.getInstance().signIn(credential).addOnSuccessListener {
+                            // onSuccess
+                            createUser(authAccount)
+                        }.addOnFailureListener {
+                            // onFail
+                        }
+                    }else{
+                        createUser(authAccount)
+                    }
 
                     val intent = Intent(this@LoginFragment.requireContext(), LandingActivity::class.java)
                     startActivity(intent)
@@ -64,6 +75,17 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun createUser(authAccount: AuthAccount) {
+        userService.addUser(User().apply {
+            displayName = authAccount.displayName
+            email = authAccount.email ?: ""
+            givenName = authAccount.givenName
+            familyName = authAccount.familyName
+            phone = "12345677"
+    //                        huaweiToken = authAccount.idToken
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
