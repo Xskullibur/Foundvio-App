@@ -14,11 +14,11 @@ const val TAG = "UserServiceImpl"
 
 class UserServiceImpl @Inject constructor(
     @ApplicationContext var context: Context,
-    var cloudDBZoneTask: Task<CloudDBZone>
+    var databaseService: DatabaseService
 ): UserService {
+
     override fun addUser(user: User) {
-        val cloudDBZone = cloudDBZoneTask.result
-        val upsertTask = cloudDBZone.executeUpsert(user)
+        val upsertTask = databaseService.cloudDBZone.executeUpsert(user)
         upsertTask.addOnSuccessListener { cloudDBZoneResult ->
             Log.i(TAG, "Upsert $cloudDBZoneResult records")
         }.addOnFailureListener {
