@@ -67,7 +67,8 @@ class AddTrackeeFragment : Fragment() {
         if (granted) {
 
             // Scan for Input
-            ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, null)
+            ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
+                .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
         } else {
 
             // Manual Input
@@ -115,9 +116,9 @@ class AddTrackeeFragment : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED -> {
 
                         // Permission Granted (Start Scan)
-                        val activity = activity
-                        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE,
-                            HmsScanAnalyzerOptions.Creator().create())
+                        // Scan for Input
+                        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
+                            .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
                     }
 
                     // Define Permission Rationale
