@@ -16,9 +16,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.foundvio.databinding.FragmentLoginBinding
 import com.foundvio.landing.LandingActivity
-import com.foundvio.model.User
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.agconnect.auth.HwIdAuthProvider
+import com.huawei.agconnect.core.service.auth.TokenSnapshot
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.support.account.AccountAuthManager
 import com.huawei.hms.support.account.request.AccountAuthParams
@@ -69,8 +69,8 @@ class LoginFragment : Fragment() {
         if (AGConnectAuth.getInstance().currentUser == null) {
             val credential = HwIdAuthProvider.credentialWithToken(accessToken)
             AGConnectAuth.getInstance().signIn(credential).addOnSuccessListener {
+                retrieveAccessToken()
                 // onSuccess
-                createUser(authAccount)
                 startLandingActivity()
             }.addOnFailureListener {
                 // onFail
@@ -81,20 +81,16 @@ class LoginFragment : Fragment() {
                     .show()
             }
         } else {
-            createUser(authAccount)
+            retrieveAccessToken()
             startLandingActivity()
         }
     }
 
-
-    private fun createUser(authAccount: AuthAccount) {
-        viewModel.addUser(User().apply {
-            displayName = authAccount.displayName
-            email = authAccount.email ?: ""
-            givenName = authAccount.givenName
-            familyName = authAccount.familyName
-            phone = "12345677"
-        })
+    private fun retrieveAccessToken() {
+        val token = AGConnectAuth.getInstance().currentUser.getToken(false)?.result?.token
+        //Set access token for communicating with server
+        viewModel.setAccessToken(token!!)
+        viewModel.getIndex()
     }
 
     private fun startLandingActivity(){
@@ -119,6 +115,9 @@ class LoginFragment : Fragment() {
                 val authParams  = AccountAuthParamsHelper(AccountAuthParams.DEFAULT_AUTH_REQUEST_PARAM)
                     .setIdToken()
                     .setAccessToken()
+                    .setUid()
+                    .setMobileNumber()
+                    .setEmail()
                     .createParams()
                 val service = AccountAuthManager.getService(this@LoginFragment.requireContext(), authParams)
                 launcher.launch(service.signInIntent)
