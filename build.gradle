@@ -2,6 +2,8 @@
 buildscript {
 
     ext.kotlin_version = "1.5.10"
+    ext.hilt_version = '2.35'
+
     repositories {
         google()
         mavenCentral()
@@ -13,7 +15,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
 
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+
         classpath 'com.huawei.agconnect:agcp:1.4.1.300'
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
