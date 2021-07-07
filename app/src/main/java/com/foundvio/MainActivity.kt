@@ -24,6 +24,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    //This is to forward the onActivityResult to the Fragment so the Fragment can receive the result
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val fragment = supportFragmentManager.findFragmentByTag("CURRENT_FRAGMENT")
+        fragment?.let {
+            val fragment = it.childFragmentManager.fragments[0]
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
+
+    }
 
 
 }

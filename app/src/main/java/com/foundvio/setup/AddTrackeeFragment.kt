@@ -4,17 +4,18 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.foundvio.R
@@ -24,22 +25,27 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.ml.scan.HmsScan
+import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions
+
 
 class AddTrackeeFragment : Fragment() {
 
-    private lateinit var navController: NavController
     private lateinit var adapter: TrackeeAdapter
     private val viewModel: SetupViewModel by activityViewModels()
 
     companion object {
-        private const val REQUEST_CODE_SCAN_ONE = 0
+        private const val REQUEST_CODE_SCAN_ONE = 0X01
     }
 
-    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?) {
+    // QR Scanner Result Callback
+    @Override
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode != RESULT_OK || data == null) {
             return
         }
+        //Default View
         if (requestCode == REQUEST_CODE_SCAN_ONE) {
 
             // Input an image for scanning and return the result.
@@ -48,20 +54,22 @@ class AddTrackeeFragment : Fragment() {
 
                 // Add Trackee
                 viewModel.addTrackee(Trackee(obj.showResult))
+                Log.i("Scan Result", obj.showResult)
             }
         }
     }
 
     // Permission Callback
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()) { granted ->
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
 
         if (granted) {
 
             // Scan for Input
-            ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, null)
-        }
-        else {
+            ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
+                .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
+        } else {
 
             // Manual Input
             val inputDialogView = LayoutInflater.from(requireContext())
@@ -69,7 +77,7 @@ class AddTrackeeFragment : Fragment() {
 
             MaterialAlertDialogBuilder(requireContext()).setView(inputDialogView)
                 .setTitle("Add Elderly/Child")
-                .setPositiveButton("Add") {dialog, _ ->
+                .setPositiveButton("Add") { dialog, _ ->
 
                     val userId = inputDialogView.findViewById<TextInputLayout>(R.id.userId_txt)
                         .editText!!.text.toString()
@@ -102,10 +110,15 @@ class AddTrackeeFragment : Fragment() {
                 when {
 
                     // Check for permissions
-                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED -> {
 
                         // Permission Granted (Start Scan)
-                        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, null)
+                        // Scan for Input
+                        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
+                            .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
                     }
 
                     // Define Permission Rationale
