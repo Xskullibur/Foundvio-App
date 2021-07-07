@@ -9,7 +9,11 @@
         android:id="@+id/loginFragment"
         android:name="com.foundvio.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_usertypeFragment"
+            app:destination="@id/usertypeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/usertypeFragment"
         android:name="com.foundvio.UsertypeFragment"

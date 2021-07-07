@@ -146,6 +146,9 @@ class AddTrackeeFragment : Fragment() {
                             this@AddTrackeeFragment.context,
                             "Please add a Trackee by click on the plus button", Toast.LENGTH_SHORT
                         ).show()
+                    }else{
+                        //Register the user after he/she is done with adding the trackees
+                        viewModel.registerUser()
                     }
                 }
 

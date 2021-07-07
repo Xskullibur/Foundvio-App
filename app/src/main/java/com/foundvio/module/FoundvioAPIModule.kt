@@ -1,9 +1,7 @@
 package com.foundvio.module
 
 import com.foundvio.service.AccessTokenInterceptor
-import com.foundvio.service.RetrofitUserService
 import com.foundvio.service.UserService
-import com.foundvio.service.UserServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,10 +44,6 @@ class FoundvioAPIModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitUserService(retrofit: Retrofit) = retrofit.create(RetrofitUserService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideUserService(userServiceImpl: UserServiceImpl): UserService = userServiceImpl
+    fun provideUserService(retrofit: Retrofit): UserService = retrofit.create(UserService::class.java)
 
 }
