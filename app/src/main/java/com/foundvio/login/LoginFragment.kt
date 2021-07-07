@@ -63,6 +63,15 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Handle the login process after Huawei ID Login Activity Succeed
+     *
+     * If the user is logging in, this will navigate to [LandingActivity]
+     *
+     * If the user is registering a new account with the Huawei ID, this will navigate to
+     * [UsertypeFragment]
+     *
+     */
     private fun processLogin(
         authAccount: AuthAccount
     ) {
@@ -70,7 +79,7 @@ class LoginFragment : Fragment() {
         if (AGConnectAuth.getInstance().currentUser == null) {
             val credential = HwIdAuthProvider.credentialWithToken(accessToken)
             AGConnectAuth.getInstance().signIn(credential).addOnSuccessListener {
-                retrieveAccessToken()
+                viewModel.retrieveAccessToken()
                 // onSuccess
 
                 if(viewModel.isRegister){
@@ -91,7 +100,7 @@ class LoginFragment : Fragment() {
                     .show()
             }
         } else {
-            retrieveAccessToken()
+            viewModel.retrieveAccessToken()
             if(viewModel.isRegister){
                 //Jump to register fragment if the user is registering
                 navController.navigate(R.id.action_loginFragment_to_usertypeFragment)
@@ -101,18 +110,6 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-    private fun retrieveAccessToken() {
-        val token = AGConnectAuth.getInstance().currentUser.getToken(false)?.result?.token
-        //Set access token for communicating with server
-        viewModel.setAccessToken(token!!)
-    }
-
-    private fun startLandingActivity(){
-        val intent = Intent(this@LoginFragment.context, LandingActivity::class.java)
-        startActivity(intent)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -137,6 +134,17 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Start the [LandingActivity] Activity
+     */
+    private fun startLandingActivity(){
+        val intent = Intent(this@LoginFragment.context, LandingActivity::class.java)
+        startActivity(intent)
+    }
+
+    /**
+     * Start the Huawei ID Login Activity
+     */
     private fun startHuaweiLoginActivity() {
         val authParams = AccountAuthParamsHelper(AccountAuthParams.DEFAULT_AUTH_REQUEST_PARAM)
             .setIdToken()
