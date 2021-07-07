@@ -33,12 +33,14 @@ class UsertypeFragment : Fragment() {
         // Caregiver Button
         binding.trackerBtn.setOnClickListener {
             // TODO: Caregiver Setup (Navigate to Register)
+            viewModel.isTrackee = false
             navController.navigate(R.id.action_usertypeFragment_to_addTrackeeFragment)
         }
 
         // Elderly Button
         binding.trackeeBtn.setOnClickListener {
             // TODO: Elderly Setup
+            viewModel.isTrackee = true
             navController.navigate(R.id.action_usertypeFragment_to_trackeeQrFragment)
         }
 

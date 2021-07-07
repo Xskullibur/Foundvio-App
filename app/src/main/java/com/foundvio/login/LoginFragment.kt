@@ -106,7 +106,6 @@ class LoginFragment : Fragment() {
         val token = AGConnectAuth.getInstance().currentUser.getToken(false)?.result?.token
         //Set access token for communicating with server
         viewModel.setAccessToken(token!!)
-        viewModel.getIndex()
     }
 
     private fun startLandingActivity(){

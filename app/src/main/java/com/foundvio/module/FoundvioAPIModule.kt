@@ -44,6 +44,6 @@ class FoundvioAPIModule {
 
     @Singleton
     @Provides
-    fun provideUserService(retrofit: Retrofit) = retrofit.create(UserService::class.java)
+    fun provideUserService(retrofit: Retrofit): UserService = retrofit.create(UserService::class.java)
 
 }
