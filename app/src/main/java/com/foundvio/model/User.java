@@ -17,18 +17,12 @@ import java.util.Date;
 /**
  * Definition of ObjectType User.
  *
- * @since 2021-06-28
+ * @since 2021-07-07
  */
-@PrimaryKeys({"displayName"})
+@PrimaryKeys({"id"})
 public final class User extends CloudDBZoneObject {
-    private String displayName;
+    private Long id;
 
-    @NotNull
-    @DefaultValue(stringValue = "NA")
-    private String email;
-
-    @NotNull
-    @DefaultValue(stringValue = "NA")
     private String phone;
 
     @NotNull
@@ -39,28 +33,23 @@ public final class User extends CloudDBZoneObject {
     @DefaultValue(stringValue = "NA")
     private String familyName;
 
+    @NotNull
+    @DefaultValue(booleanValue = false)
+    private Boolean isTracker;
+
     public User() {
         super(User.class);
-        this.email = "NA";
-        this.phone = "NA";
         this.givenName = "NA";
         this.familyName = "NA";
+        this.isTracker = false;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
+    public Long getId() {
+        return id;
     }
 
     public void setPhone(String phone) {
@@ -85,6 +74,14 @@ public final class User extends CloudDBZoneObject {
 
     public String getFamilyName() {
         return familyName;
+    }
+
+    public void setIsTracker(Boolean isTracker) {
+        this.isTracker = isTracker;
+    }
+
+    public Boolean getIsTracker() {
+        return isTracker;
     }
 
 }

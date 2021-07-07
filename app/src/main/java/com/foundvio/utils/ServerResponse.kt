@@ -24,12 +24,12 @@ import retrofit2.Response
  *  }
  *  ```
  */
-class ServerResponse(val message: String, val status: String)
+class ServerResponse<out T>(val message: T, val status: String)
 
 /**
  * Check if server response a successful message
  */
-fun Response<ServerResponse>.isSuccess(): Boolean {
+fun<T> Response<ServerResponse<T>>.isSuccess(): Boolean {
     this.body()?.let {
         return it.status == "Success"
     }
@@ -39,7 +39,7 @@ fun Response<ServerResponse>.isSuccess(): Boolean {
 /**
  * Check if server response an error message
  */
-fun Response<ServerResponse>.isError(): Boolean {
+fun<T> Response<ServerResponse<T>>.isError(): Boolean {
     this.body()?.let {
         return it.status == "Error"
     }
