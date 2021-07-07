@@ -1,18 +1,18 @@
 package com.foundvio.service
 
+import com.foundvio.model.User
 import com.foundvio.utils.ServerResponse
 import retrofit2.Response
-import javax.inject.Inject
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface UserService {
-    suspend fun getIndex(): Response<ServerResponse>
-}
 
-class UserServiceImpl @Inject constructor(
-    val retrofitUserService: RetrofitUserService
-): UserService {
-    override suspend fun getIndex(): Response<ServerResponse> {
-        return retrofitUserService.getIndex()
-    }
+    @GET(".")
+    suspend fun getIndex(): Response<ServerResponse>
+
+    @POST("addUser")
+    suspend fun addUser(): Response<ServerResponse>
 
 }
