@@ -11,8 +11,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_usertypeFragment"
-            app:destination="@id/usertypeFragment" />
+            android:id="@+id/action_loginFragment_to_registerDetailsFragment"
+            app:destination="@id/registerDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/usertypeFragment"
@@ -38,4 +38,13 @@
         android:name="com.foundvio.TrackeeQrFragment"
         android:label="fragment_trackee_qr"
         tools:layout="@layout/fragment_trackee_qr" />
+    <fragment
+        android:id="@+id/registerDetailsFragment"
+        android:name="com.foundvio.setup.RegisterDetailsFragment"
+        android:label="fragment_register_details"
+        tools:layout="@layout/fragment_register_details" >
+        <action
+            android:id="@+id/action_registerDetailsFragment_to_usertypeFragment"
+            app:destination="@id/usertypeFragment" />
+    </fragment>
 </navigation>

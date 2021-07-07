@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
      * If the user is logging in, this will navigate to [LandingActivity]
      *
      * If the user is registering a new account with the Huawei ID, this will navigate to
-     * [UsertypeFragment]
+     * [com.foundvio.setup.RegisterDetailsFragment]
      *
      */
     private fun processLogin(
@@ -84,7 +84,7 @@ class LoginFragment : Fragment() {
 
                 if(viewModel.isRegister){
                     //Jump to register fragment if the user is registering
-                    navController.navigate(R.id.action_loginFragment_to_usertypeFragment)
+                    navController.navigate(R.id.action_loginFragment_to_registerDetailsFragment)
                 }else{
                     //Jump the landing activity if the user is logging in
                     startLandingActivity()
@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
             viewModel.retrieveAccessToken()
             if(viewModel.isRegister){
                 //Jump to register fragment if the user is registering
-                navController.navigate(R.id.action_loginFragment_to_usertypeFragment)
+                navController.navigate(R.id.action_loginFragment_to_registerDetailsFragment)
             }else{
                 //Jump the landing activity if the user is logging in
                 startLandingActivity()

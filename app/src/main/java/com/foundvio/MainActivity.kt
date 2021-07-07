@@ -1,10 +1,10 @@
 package com.foundvio
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.foundvio.databinding.ActivityMainBinding
 import com.foundvio.service.DatabaseService
-import com.huawei.agconnect.cloud.database.AGConnectCloudDB
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             val fragment = it.childFragmentManager.fragments[0]
             fragment.onActivityResult(requestCode, resultCode, data)
         }
-
     }
 
 

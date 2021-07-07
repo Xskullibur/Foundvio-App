@@ -92,15 +92,15 @@ class AddTrackeeFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentAddTrackeeBinding.inflate(inflater)
+
+        viewModel.toast.observe(viewLifecycleOwner) {
+            if(it != null)Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
 
         binding.apply {
 

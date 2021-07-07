@@ -1,23 +1,24 @@
 package com.foundvio.setup
 
-import android.content.Context
-import android.widget.Toast
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.foundvio.model.Trackee
 import com.foundvio.service.UserService
 import com.foundvio.utils.isSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
-    @ApplicationContext var context: Context,
     var userService: UserService
 ): ViewModel() {
 
     var isTrackee = false
+    var setupUserDetails = SetupUserDetails()
+
 
     private val _trackees = MutableLiveData<MutableList<Trackee>>(mutableListOf())
     val trackees: LiveData<MutableList<Trackee>> get() = _trackees
@@ -39,15 +40,23 @@ class SetupViewModel @Inject constructor(
     fun registerUser(){
         viewModelScope.launch {
             loadData {
-                val response = userService.registerUser(isTrackee)
+                val response = userService.registerUser(
+                    isTrackee,
+                    setupUserDetails.phone,
+                    setupUserDetails.familyName,
+                    setupUserDetails.givenName)
                 if(response.isSuccess()){
-                    Toast.makeText(context, "User created", Toast.LENGTH_SHORT).show()
+                    _toast.value = "User created"
                 }else{
-                    Toast.makeText(context, response.body()?.message, Toast.LENGTH_SHORT).show()
+                    _toast.value = response.body()?.message
                 }
             }
         }
     }
+
+    //To show toast message
+    private val _toast = MutableLiveData<String>(null)
+    val toast: LiveData<String?> get() = _toast
 
     //To determine whether to show a spinner if the app is loading some data
     private val _loading = MutableLiveData(false)

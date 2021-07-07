@@ -12,6 +12,10 @@ interface UserService {
     suspend fun getIndex(): Response<ServerResponse>
 
     @POST("registerUser")
-    suspend fun registerUser(@Query("isTrackee") isTrackee: Boolean): Response<ServerResponse>
+    suspend fun registerUser(@Query("isTracker") isTracker: Boolean,
+                            @Query("phone") phone: String,
+                            @Query("familyName") familyName: String,
+                            @Query("givenName") givenName: String
+    ): Response<ServerResponse>
 
 }

@@ -2,7 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".login.LoginFragment">
+    tools:context=".setup.RegisterDetailsFragment">
+
+    <data>
+        <variable
+            name="details"
+            type="com.foundvio.setup.SetupUserDetails" />
+    </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,8 +19,8 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:textSize="34sp"
+            android:text="Please Provide Your Details"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +32,8 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:hint="Email"
+            android:hint="Phone"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +41,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@={details.phone}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +52,8 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:hint="Password"
+            android:hint="Given Name"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,29 +61,39 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@={details.givenName}"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/familyNameTextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Family Name"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/givenNameTextLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={details.familyName}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_button"
+            android:id="@+id/ready_button"
             android:layout_width="200dp"
             android:layout_height="0dp"
-            android:layout_marginTop="49dp"
-            android:text="Login"
-            app:layout_constraintEnd_toEndOf="@+id/givenNameTextLayout"
-            app:layout_constraintStart_toStartOf="@+id/givenNameTextLayout"
-            app:layout_constraintTop_toBottomOf="@+id/givenNameTextLayout" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/register_button"
-            android:layout_width="200dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:text="Register with Huawei ID"
-            app:layout_constraintEnd_toEndOf="@+id/givenNameTextLayout"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/givenNameTextLayout"
-            app:layout_constraintTop_toBottomOf="@+id/login_button" />
+            android:layout_marginTop="24dp"
+            android:text="I am ready"
+            app:layout_constraintEnd_toEndOf="@+id/familyNameTextLayout"
+            app:layout_constraintStart_toStartOf="@+id/familyNameTextLayout"
+            app:layout_constraintTop_toBottomOf="@+id/familyNameTextLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
