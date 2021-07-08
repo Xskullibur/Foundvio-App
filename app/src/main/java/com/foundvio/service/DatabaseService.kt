@@ -3,6 +3,9 @@ package com.foundvio.service
 import com.huawei.agconnect.cloud.database.CloudDBZone
 import com.huawei.hmf.tasks.Task
 
+/**
+ * Initialise the [cloudDBZone] field for CloudDB
+ */
 class DatabaseService(
     var cloudDBZoneTask: Task<CloudDBZone>
 ) {

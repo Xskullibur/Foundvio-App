@@ -5,6 +5,15 @@ import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import com.foundvio.setup.validation.ValidationField
 
+/**
+ * Extra details provided by user
+ *
+ * This class support two-way binding between the UI and data.
+ * This means that if the user were to update the text in the UI, the data here gets updated as well
+ *
+ * @see fragment_register_details.xml for UI binding
+ *
+ */
 class SetupUserDetails : BaseObservable() {
 
     val phoneValidation = ValidationField<String>().apply {
