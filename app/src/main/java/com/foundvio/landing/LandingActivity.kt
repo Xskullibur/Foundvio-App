@@ -4,16 +4,35 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.foundvio.R
+import com.foundvio.TrackeeQrFragment
 import com.foundvio.databinding.ActivityLandingBinding
+import com.foundvio.setup.AddTrackeeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 const val LAST_FRAGMENT_ID = "LAST_FRAGMENT_ID"
 
+@AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLandingBinding
 
     private var currentFragment: Fragment = HomeFragment()
     private var currentFragmentId = HomeFragment.ID
+
+    private fun switchFragment(fragment: Fragment){
+        this.currentFragment = fragment
+
+        currentFragmentId = when(currentFragment){
+            is HomeFragment -> HomeFragment.ID
+            is SocialFragment -> SocialFragment.ID
+            else -> -1
+        }
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_container, fragment)
+            commit()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +51,10 @@ class LandingActivity : AppCompatActivity() {
                         switchFragment(SocialFragment())
                         true
                     }
-                    R.id.settings_menu -> true
+                    R.id.settings_menu -> {
+                        switchFragment(AddTrackeeFragment())
+                        true
+                    }
                     else -> false
                 }
             }
@@ -52,26 +74,10 @@ class LandingActivity : AppCompatActivity() {
 
     }
 
-    private fun switchFragment(fragment: Fragment){
-        this.currentFragment = fragment
-
-        currentFragmentId = when(currentFragment){
-            is HomeFragment -> HomeFragment.ID
-            is SocialFragment -> SocialFragment.ID
-            else -> -1
-        }
-
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_container, fragment)
-            commit()
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putInt(LAST_FRAGMENT_ID, currentFragmentId)
     }
-
 
 }

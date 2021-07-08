@@ -1,6 +1,5 @@
-package com.foundvio
+package com.foundvio.setup
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,13 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.foundvio.R
 import com.foundvio.databinding.FragmentUsertypeBinding
-import com.foundvio.setup.SetupViewModel
 
 class UsertypeFragment : Fragment() {
 
     private lateinit var navController: NavController
-
     private val viewModel: SetupViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

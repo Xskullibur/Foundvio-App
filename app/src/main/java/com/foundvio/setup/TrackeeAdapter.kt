@@ -13,6 +13,7 @@ import com.foundvio.R
 import com.foundvio.databinding.FragmentAddTrackeeBinding
 import com.foundvio.databinding.TrackeeViewHolderBinding
 import com.foundvio.model.Trackee
+import com.foundvio.model.User
 
 import com.google.android.material.snackbar.Snackbar
 
@@ -21,16 +22,16 @@ import com.google.android.material.snackbar.Snackbar
 
 class TrackeeAdapter(
     private val binding: FragmentAddTrackeeBinding,
-    private var trackees: MutableList<Trackee>
+    private var trackees: MutableList<User>
 ) : RecyclerView.Adapter<TrackeeAdapter.TrackeeViewHolder>() {
 
-    private var recentlyDeletedItem: Trackee? = null
+    private var recentlyDeletedItem: User? = null
     private var recentlyDeletedItemPosition: Int? = null
 
     class TrackeeViewHolder(private val binding: TrackeeViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun setTrackee(trackee: Trackee) {
+        fun setTrackee(trackee: User) {
             this.binding.trackee = trackee
         }
 

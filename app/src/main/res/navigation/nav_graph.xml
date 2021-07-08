@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/usertypeFragment"
-        android:name="com.foundvio.UsertypeFragment"
+        android:name="com.foundvio.setup.UsertypeFragment"
         android:label="fragment_usertype"
         tools:layout="@layout/fragment_usertype" >
         <action

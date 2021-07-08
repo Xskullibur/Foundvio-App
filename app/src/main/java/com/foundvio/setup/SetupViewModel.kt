@@ -10,24 +10,35 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.foundvio.model.User
+import com.foundvio.service.TrackerTrackeeService
+import dagger.hilt.android.AndroidEntryPoint
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
     @ApplicationContext var context: Context,
-    var userService: UserService
+    var userService: UserService,
+    var trackerTrackeeService: TrackerTrackeeService
 ): ViewModel() {
 
     var isTrackee = false
-
-    private val _trackees = MutableLiveData<MutableList<Trackee>>(mutableListOf())
-    val trackees: LiveData<MutableList<Trackee>> get() = _trackees
+    private val _trackees = MutableLiveData<MutableList<User>>(mutableListOf())
+    val trackees: LiveData<MutableList<User>> get() = _trackees
 
     /**
      * Add [Trackee] into the list of Trackees [LiveData]
      */
-    fun addTrackee(trackee: Trackee){
-        _trackees.value?.add(trackee)
-        _trackees.value = _trackees.value
+    fun addTrackee(trackee: User) {
+
+        viewModelScope.launch {
+            val response = trackerTrackeeService.addTrackerTrackee(trackee.phone)
+            if (response.isSuccess()){
+                Toast.makeText(context, "Added Trackee", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(context, "Error: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /**
