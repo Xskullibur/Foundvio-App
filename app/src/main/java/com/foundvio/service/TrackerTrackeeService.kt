@@ -17,12 +17,12 @@ interface TrackerTrackeeService {
     @POST("addTrackerTrackee")
     suspend fun addTrackerTrackee(
         @Query("trackeeId") trackeeId: String?
-    ): Response<ServerResponse>
+    ): Response<ServerResponse<String>>
 }
 
 // Help to access service while maintaining encapsulation
 interface TrackerTrackeeHelper {
-    suspend fun addTrackerTrackee(trackeeId: String): Response<ServerResponse>
+    suspend fun addTrackerTrackee(trackeeId: String): Response<ServerResponse<String>>
 }
 
 // Implements Helper to provide functionality
@@ -32,7 +32,7 @@ class TrackerTrackeeHelperImpl @Inject constructor (
 
     override suspend fun addTrackerTrackee(
         trackeeId: String
-    ): Response<ServerResponse> {
+    ): Response<ServerResponse<String>> {
         return trackerTrackeeService.addTrackerTrackee(trackeeId)
     }
 }

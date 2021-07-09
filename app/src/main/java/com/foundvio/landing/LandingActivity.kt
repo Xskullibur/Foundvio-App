@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.foundvio.R
 import com.foundvio.databinding.ActivityLandingBinding
 import com.foundvio.service.UserService
+import com.foundvio.setup.AddTrackeeFragment
 import com.foundvio.utils.isSuccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
