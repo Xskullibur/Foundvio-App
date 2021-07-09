@@ -16,7 +16,7 @@ import com.foundvio.setup.validation.ValidationField
  */
 class SetupUserDetails : BaseObservable() {
 
-    val phoneValidation = ValidationField<String>().apply {
+    @Transient val phoneValidation = ValidationField<String>().apply {
         rule("Phone cannot be blank") { it.isNotBlank() }
     }
 
@@ -28,7 +28,7 @@ class SetupUserDetails : BaseObservable() {
             notifyPropertyChanged(BR.phone)
         }
 
-    val familyNameValidation = ValidationField<String>().apply {
+    @Transient val familyNameValidation = ValidationField<String>().apply {
         rule("Family Name cannot be blank") { it.isNotBlank() }
     }
 
@@ -40,7 +40,7 @@ class SetupUserDetails : BaseObservable() {
             notifyPropertyChanged(BR.familyName)
         }
 
-    val givenNameValidation = ValidationField<String>().apply {
+    @Transient val givenNameValidation = ValidationField<String>().apply {
         rule("Given Name cannot be blank") { it.isNotBlank() }
     }
     @get:Bindable
@@ -50,6 +50,8 @@ class SetupUserDetails : BaseObservable() {
             givenNameValidation.validate(field)
             notifyPropertyChanged(BR.givenName)
         }
+
+    var isTrackee = false
 
     /**
      * Check if all the fields are valid

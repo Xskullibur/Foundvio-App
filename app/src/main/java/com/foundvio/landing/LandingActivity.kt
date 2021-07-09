@@ -20,9 +20,6 @@ class LandingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLandingBinding
 
-    @Inject
-    lateinit var userService: UserService
-
     private var currentFragment: Fragment = HomeFragment()
     private var currentFragmentId = HomeFragment.ID
 
@@ -46,15 +43,6 @@ class LandingActivity : AppCompatActivity() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        lifecycleScope.launch{
-            val res = userService.userDetails()
-
-            if(res.isSuccess()){
-                val user = res.body()!!.message
-                println(user.id)
-            }
-        }
 
         binding.apply {
             bottomNavigation.setOnItemSelectedListener{ item ->

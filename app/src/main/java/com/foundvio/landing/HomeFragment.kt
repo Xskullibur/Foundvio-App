@@ -7,12 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.foundvio.R
 import com.foundvio.databinding.FragmentHomeBinding
+import com.foundvio.service.UserService
+import com.foundvio.utils.isSuccess
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.OnMapReadyCallback
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -31,6 +36,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        viewModel.userDetails()
 
         val mapViewBundle  = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)
 

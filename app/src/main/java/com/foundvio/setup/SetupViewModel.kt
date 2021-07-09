@@ -23,7 +23,6 @@ class SetupViewModel @Inject constructor(
     private val _toast = MutableLiveData<String>(null)
     val toast: LiveData<String?> get() = _toast
 
-    var isTrackee = false
     var setupUserDetails = SetupUserDetails()
 
     private val _trackees = MutableLiveData<MutableList<User>>(mutableListOf())
@@ -33,10 +32,11 @@ class SetupViewModel @Inject constructor(
      * Add [Trackee] into the list of Trackees [LiveData]
      */
     fun addTrackee(trackee: User) {
-
         viewModelScope.launch {
             val response = trackerTrackeeService.addTrackerTrackee(trackee.phone)
             if (response.isSuccess()){
+                _trackees.value?.add(trackee)
+                _trackees.value = _trackees.value
                 _toast.value = "Added Trackee"
             }
             else{
@@ -54,15 +54,11 @@ class SetupViewModel @Inject constructor(
     fun registerUser(){
         viewModelScope.launch {
             loadData {
-                val response = userService.registerUser(
-                    isTrackee,
-                    setupUserDetails.phone,
-                    setupUserDetails.familyName,
-                    setupUserDetails.givenName)
+                val response = userService.registerUser(setupUserDetails)
                 if(response.isSuccess()){
                     _toast.value = "User created"
                 }else{
-                    _toast.value = response.body()?.message
+                    _toast.value = response.body()?.message!!
                 }
             }
         }
