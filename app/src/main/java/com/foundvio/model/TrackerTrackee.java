@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * Definition of ObjectType TrackerTrackee.
  *
- * @since 2021-07-07
+ * @since 2021-07-06
  */
 @PrimaryKeys({"id"})
 public final class TrackerTrackee extends CloudDBZoneObject {

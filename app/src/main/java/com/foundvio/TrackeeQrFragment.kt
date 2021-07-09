@@ -16,7 +16,7 @@ import com.huawei.hms.ml.scan.HmsScan
 class TrackeeQrFragment : Fragment() {
 
     companion object {
-        const val ID = "TrackeeID123"
+        const val ID = "12345679"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

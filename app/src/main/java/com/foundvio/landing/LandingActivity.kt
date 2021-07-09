@@ -19,11 +19,26 @@ class LandingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLandingBinding
 
+    @Inject
+    lateinit var userService: UserService
+
     private var currentFragment: Fragment = HomeFragment()
     private var currentFragmentId = HomeFragment.ID
 
-    @Inject
-    lateinit var userService: UserService
+    private fun switchFragment(fragment: Fragment){
+        this.currentFragment = fragment
+
+        currentFragmentId = when(currentFragment){
+            is HomeFragment -> HomeFragment.ID
+            is SocialFragment -> SocialFragment.ID
+            else -> -1
+        }
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_container, fragment)
+            commit()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +66,10 @@ class LandingActivity : AppCompatActivity() {
                         switchFragment(SocialFragment())
                         true
                     }
-                    R.id.settings_menu -> true
+                    R.id.settings_menu -> {
+                        switchFragment(AddTrackeeFragment())
+                        true
+                    }
                     else -> false
                 }
             }
@@ -71,26 +89,10 @@ class LandingActivity : AppCompatActivity() {
 
     }
 
-    private fun switchFragment(fragment: Fragment){
-        this.currentFragment = fragment
-
-        currentFragmentId = when(currentFragment){
-            is HomeFragment -> HomeFragment.ID
-            is SocialFragment -> SocialFragment.ID
-            else -> -1
-        }
-
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_container, fragment)
-            commit()
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putInt(LAST_FRAGMENT_ID, currentFragmentId)
     }
-
 
 }

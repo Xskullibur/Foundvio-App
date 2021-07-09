@@ -20,7 +20,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.foundvio.R
 import com.foundvio.databinding.FragmentAddTrackeeBinding
-import com.foundvio.model.Trackee
+import com.foundvio.landing.LandingActivity
+import com.foundvio.model.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.huawei.hms.hmsscankit.ScanUtil
@@ -37,8 +38,50 @@ class AddTrackeeFragment : Fragment() {
         private const val REQUEST_CODE_SCAN_ONE = 0X01
     }
 
+    // Start Scanning for Result
+    private fun startQrScan() {
+        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
+            .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
+    }
+
+    // Permission Callback
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+
+        if (granted) {
+
+            // Scan for Input
+            startQrScan()
+        }
+        else {
+
+            // Manual Input
+            val inputDialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.input_dialog_view, null)
+
+            MaterialAlertDialogBuilder(requireContext()).setView(inputDialogView)
+                .setTitle("Add Elderly/Child")
+                .setPositiveButton("Add") { dialog, _ ->
+
+                    val userId = inputDialogView.findViewById<TextInputLayout>(R.id.userId_txt)
+                        .editText!!.text.toString()
+                    if (userId.isNotBlank()) {
+
+                        // TODO: Get User from phone or userId
+                        val user = User()
+                        user.phone = userId
+                        viewModel.addTrackee(user)
+                    }
+
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
     // QR Scanner Result Callback
-    @Override
+    @RequiresApi(api = Build.VERSION_CODES.N)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -52,43 +95,16 @@ class AddTrackeeFragment : Fragment() {
             val obj = data.getParcelableExtra(ScanUtil.RESULT) as HmsScan?
             if (obj != null) {
 
-                // Add Trackee
-                viewModel.addTrackee(Trackee(obj.showResult))
+                // Log Results
                 Log.i("Scan Result", obj.showResult)
+
+                // TODO: Get User with Phone or UserId
+                val user = User()
+                user.phone = obj.showResult
+
+                // Add Trackee to Tracker
+                viewModel.addTrackee(user)
             }
-        }
-    }
-
-    // Permission Callback
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-
-        if (granted) {
-
-            // Scan for Input
-            ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
-                .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
-        } else {
-
-            // Manual Input
-            val inputDialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.input_dialog_view, null)
-
-            MaterialAlertDialogBuilder(requireContext()).setView(inputDialogView)
-                .setTitle("Add Elderly/Child")
-                .setPositiveButton("Add") { dialog, _ ->
-
-                    val userId = inputDialogView.findViewById<TextInputLayout>(R.id.userId_txt)
-                        .editText!!.text.toString()
-                    if (userId.isNotBlank()) {
-                        viewModel.addTrackee(Trackee(userId))
-                    }
-
-                    dialog.dismiss()
-                }
-                .show()
-
         }
     }
 
@@ -106,9 +122,7 @@ class AddTrackeeFragment : Fragment() {
 
             // Add Trackee
             addTrackeeBtn.setOnClickListener {
-
                 when {
-
                     // Check for permissions
                     ContextCompat.checkSelfPermission(
                         requireContext(),
@@ -116,9 +130,7 @@ class AddTrackeeFragment : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED -> {
 
                         // Permission Granted (Start Scan)
-                        // Scan for Input
-                        ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
-                            .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
+                        startQrScan()
                     }
 
                     // Define Permission Rationale

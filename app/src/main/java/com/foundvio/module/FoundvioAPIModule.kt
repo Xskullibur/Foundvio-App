@@ -2,6 +2,7 @@ package com.foundvio.module
 
 import com.foundvio.service.AccessTokenInterceptor
 import com.foundvio.service.UserService
+import com.foundvio.service.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 class FoundvioAPIModule {
 
     @Provides
-    fun provideServerHost() = "http://192.168.1.1:8080"
+    fun provideServerHost() = "http://192.168.1.184:8080/"
 
     @Singleton
     @Provides
@@ -45,5 +46,9 @@ class FoundvioAPIModule {
     @Singleton
     @Provides
     fun provideUserService(retrofit: Retrofit): UserService = retrofit.create(UserService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideTrackerTrackeeService(retrofit: Retrofit) = retrofit.create(TrackerTrackeeService::class.java)
 
 }

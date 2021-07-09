@@ -10,25 +10,39 @@ import com.foundvio.utils.isSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.foundvio.model.User
+import com.foundvio.service.TrackerTrackeeService
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
-    var userService: UserService
+    var userService: UserService,
+    var trackerTrackeeService: TrackerTrackeeService
 ): ViewModel() {
+
+    //To show toast message
+    private val _toast = MutableLiveData<String>(null)
+    val toast: LiveData<String?> get() = _toast
 
     var isTrackee = false
     var setupUserDetails = SetupUserDetails()
 
-
-    private val _trackees = MutableLiveData<MutableList<Trackee>>(mutableListOf())
-    val trackees: LiveData<MutableList<Trackee>> get() = _trackees
+    private val _trackees = MutableLiveData<MutableList<User>>(mutableListOf())
+    val trackees: LiveData<MutableList<User>> get() = _trackees
 
     /**
      * Add [Trackee] into the list of Trackees [LiveData]
      */
-    fun addTrackee(trackee: Trackee){
-        _trackees.value?.add(trackee)
-        _trackees.value = _trackees.value
+    fun addTrackee(trackee: User) {
+
+        viewModelScope.launch {
+            val response = trackerTrackeeService.addTrackerTrackee(trackee.phone)
+            if (response.isSuccess()){
+                _toast.value = "Added Trackee"
+            }
+            else{
+                _toast.value = "Error: ${response.body()?.message}"
+            }
+        }
     }
 
     /**
@@ -53,10 +67,6 @@ class SetupViewModel @Inject constructor(
             }
         }
     }
-
-    //To show toast message
-    private val _toast = MutableLiveData<String>(null)
-    val toast: LiveData<String?> get() = _toast
 
     //To determine whether to show a spinner if the app is loading some data
     private val _loading = MutableLiveData(false)
