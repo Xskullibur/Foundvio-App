@@ -1,5 +1,6 @@
 package com.foundvio.landing
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -35,6 +36,16 @@ class LandingActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_container, fragment)
             commit()
+        }
+    }
+
+    //This is to forward the onActivityResult to the Fragment so the Fragment can receive the result
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val fragment = supportFragmentManager.findFragmentByTag("CURRENT_FRAGMENT")
+        fragment?.let {
+            val fragment = it.childFragmentManager.fragments[0]
+            fragment.onActivityResult(requestCode, resultCode, data)
         }
     }
 
