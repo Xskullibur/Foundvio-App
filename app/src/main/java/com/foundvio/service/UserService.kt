@@ -17,7 +17,9 @@ interface UserService {
     @POST("registerUser")
     suspend fun registerUser(@Body user: SetupUserDetails): Response<ServerResponse<String>>
 
+    @POST("getUserById")
+    suspend fun getUserById(@Body userId: Long): Response<ServerResponse<User>>
+
     @GET("userDetails")
     suspend fun userDetails(): Response<ServerResponse<User>>
-
 }

@@ -34,19 +34,25 @@ class SetupViewModel @Inject constructor(
     fun addTrackee(trackeeId: Long) {
         viewModelScope.launch {
 
-            // TODO: Verify TrackeeId
-            val trackee = User()
-            trackee.id = trackeeId
-            trackee.givenName = "Temporary Name"
+            // Verify TrackeeId
+            val userResponse = userService.getUserById(trackeeId)
+            if (userResponse.isSuccess()) {
 
-            val response = trackerTrackeeService.addTrackerTrackee(trackeeId)
-            if (response.isSuccess()){
-                _trackees.value?.add(trackee)
-                _trackees.value = _trackees.value
-                _toast.value = "Added Trackee"
+                // TODO: Check if record exist
+                val trackee = userResponse.body()!!.message
+
+                val response = trackerTrackeeService.addTrackerTrackee(trackeeId)
+                if (response.isSuccess()){
+                    _trackees.value?.add(trackee)
+                    _trackees.value = _trackees.value
+                    _toast.value = "Added Trackee"
+                }
+                else{
+                    _toast.value = "Error: ${response.body()?.message}"
+                }
             }
-            else{
-                _toast.value = "Error: ${response.body()?.message}"
+            else {
+                _toast.value = "Invalid user please try again or check if the user is registered."
             }
         }
     }
