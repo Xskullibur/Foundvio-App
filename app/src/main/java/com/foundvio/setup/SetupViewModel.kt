@@ -31,9 +31,15 @@ class SetupViewModel @Inject constructor(
     /**
      * Add [Trackee] into the list of Trackees [LiveData]
      */
-    fun addTrackee(trackee: User) {
+    fun addTrackee(trackeeId: Long) {
         viewModelScope.launch {
-            val response = trackerTrackeeService.addTrackerTrackee(trackee.phone)
+
+            // TODO: Verify TrackeeId
+            val trackee = User()
+            trackee.id = trackeeId
+            trackee.givenName = "Temporary Name"
+
+            val response = trackerTrackeeService.addTrackerTrackee(trackeeId)
             if (response.isSuccess()){
                 _trackees.value?.add(trackee)
                 _trackees.value = _trackees.value

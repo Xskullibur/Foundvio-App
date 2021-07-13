@@ -39,6 +39,12 @@ class LandingActivity : AppCompatActivity() {
         }
     }
 
+    //This is to forward the onActivityResult to the Fragment so the Fragment can receive the result
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        currentFragment.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLandingBinding.inflate(layoutInflater)

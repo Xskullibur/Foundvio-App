@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.ml.scan.HmsScan
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions
+import java.lang.NumberFormatException
 
 
 class AddTrackeeFragment : Fragment() {
@@ -40,8 +41,24 @@ class AddTrackeeFragment : Fragment() {
 
     // Start Scanning for Result
     private fun startQrScan() {
+        Log.i("QR Scanner", "Scanning for results...")
         ScanUtil.startScan(activity, REQUEST_CODE_SCAN_ONE, HmsScanAnalyzerOptions.Creator()
             .setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create())
+    }
+
+    // Add TrackerTrackee
+    private fun requestAddTrackerTrackee(trackeeId: String) {
+
+        Log.i("Request to Server", "Adding TrackerTrackee...")
+
+        try {
+            viewModel.addTrackee(trackeeId.toLong())
+        }
+        catch (e: NumberFormatException) {
+            Toast.makeText(context, "Failed to add, please try again...", Toast.LENGTH_SHORT).show()
+            Log.w("Invalid UserId", "Unable to add TrackerTrackee due to " +
+                    "invalid userId. Please check if userId is a Long")
+        }
     }
 
     // Permission Callback
@@ -56,7 +73,7 @@ class AddTrackeeFragment : Fragment() {
         }
         else {
 
-            // Manual Input
+            // Get Manual Input from AlertDialog
             val inputDialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.input_dialog_view, null)
 
@@ -64,16 +81,10 @@ class AddTrackeeFragment : Fragment() {
                 .setTitle("Add Elderly/Child")
                 .setPositiveButton("Add") { dialog, _ ->
 
-                    val userId = inputDialogView.findViewById<TextInputLayout>(R.id.userId_txt)
+                    val trackeeId = inputDialogView.findViewById<TextInputLayout>(R.id.userId_txt)
                         .editText!!.text.toString()
-                    if (userId.isNotBlank()) {
 
-                        // TODO: Get User from phone or userId
-                        val user = User()
-                        user.phone = userId
-                        viewModel.addTrackee(user)
-                    }
-
+                    requestAddTrackerTrackee(trackeeId)
                     dialog.dismiss()
                 }
                 .show()
@@ -81,13 +92,13 @@ class AddTrackeeFragment : Fragment() {
     }
 
     // QR Scanner Result Callback
-    @RequiresApi(api = Build.VERSION_CODES.N)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode != RESULT_OK || data == null) {
             return
         }
+
         //Default View
         if (requestCode == REQUEST_CODE_SCAN_ONE) {
 
@@ -98,12 +109,9 @@ class AddTrackeeFragment : Fragment() {
                 // Log Results
                 Log.i("Scan Result", obj.showResult)
 
-                // TODO: Get User with Phone or UserId
-                val user = User()
-                user.phone = obj.showResult
-
                 // Add Trackee to Tracker
-                viewModel.addTrackee(user)
+                val trackeeId = obj.showResult
+                requestAddTrackerTrackee(trackeeId)
             }
         }
     }
