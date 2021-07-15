@@ -37,6 +37,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        viewModel.userLocation.observe(viewLifecycleOwner){
+            Log.d(TAG, "User location ${it.toDMSFormat()}")
+        }
+        viewModel.startTracking()
         viewModel.userDetails()
 
         val mapViewBundle  = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)

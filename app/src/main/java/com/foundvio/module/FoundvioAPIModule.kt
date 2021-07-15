@@ -21,7 +21,7 @@ import javax.inject.Singleton
 class FoundvioAPIModule {
 
     @Provides
-    fun provideServerHost() = "http://192.168.1.184:8080/"
+    fun provideServerHost() = "http://192.168.1.1:8080/"
 
     @Singleton
     @Provides
