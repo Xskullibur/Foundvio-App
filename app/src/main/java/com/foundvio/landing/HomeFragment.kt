@@ -11,15 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import com.foundvio.R
 import com.foundvio.databinding.FragmentHomeBinding
 import com.foundvio.service.UserService
+import com.foundvio.tracking.GeoCoord
+import com.foundvio.tracking.toLatLng
 import com.foundvio.utils.isSuccess
-import com.huawei.hms.maps.HuaweiMap
-import com.huawei.hms.maps.MapView
-import com.huawei.hms.maps.MapsInitializer
-import com.huawei.hms.maps.OnMapReadyCallback
+import com.huawei.hms.maps.*
+import com.huawei.hms.maps.model.LatLng
+import com.huawei.hms.maps.model.Marker
+import com.huawei.hms.maps.model.MarkerOptions
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
+
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
@@ -30,6 +33,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private val viewModel by activityViewModels<HomeViewModel>()
     private var hMap: HuaweiMap? = null
     private lateinit var mapView: MapView
+    private var mMarker: Marker? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +41,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        viewModel.userLocation.observe(viewLifecycleOwner){
+        viewModel.userLocation.observe(viewLifecycleOwner) {
             Log.d(TAG, "User location ${it.toDMSFormat()}")
+            addMarker(it)
         }
         viewModel.startTracking()
         viewModel.userDetails()
 
-        val mapViewBundle  = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)
+        val mapViewBundle = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)
 
         MapsInitializer.setApiKey("CgB6e3x9y5c8sOhG0Fjd6i7dvnPOxF8+pKKWhXCG3N58byTVYR9uPaUK7LnoRP8mGhgg+hotmPazueze0597cUhU")
 
@@ -83,7 +88,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         Log.d(TAG, "onMapReady: ")
         hMap = map
         hMap?.isMyLocationEnabled = false
-//        hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(48.893478, 2.334595), 10f))
     }
 
     override fun onPause() {
@@ -99,6 +103,19 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    fun addMarker(geoCoord: GeoCoord) {
+        if (null != mMarker) {
+            mMarker?.remove()
+        }
+        val latLng = geoCoord.toLatLng()
+        val options = MarkerOptions()
+            .position(latLng)
+            .title("Hello Huawei Map")
+            .snippet("This is a snippet!")
+        mMarker = hMap?.addMarker(options)
+        hMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
     }
 
 }

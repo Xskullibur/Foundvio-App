@@ -1,6 +1,7 @@
 package com.foundvio.tracking.testing
 
 import com.foundvio.tracking.GeoCoord
+import com.foundvio.tracking.GeoCoord.Companion.at
 import com.foundvio.tracking.TrackeeGeoCoordProducer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +18,11 @@ class RandomTrackeeGeoCoordProducer(val scope: CoroutineScope) : TrackeeGeoCoord
         val meanLat = 1.3521
         val meanLng = 103.8198
 
-        val stdDv = .05
+        val stdDv = .01
 
         val lat = random.nextGaussian() * stdDv + meanLat
         val lng = random.nextGaussian() * stdDv + meanLng
-        return GeoCoord(lat.toBigDecimal(), lng.toBigDecimal())
+        return lat at lng
     }
 
     private val job = Job()
