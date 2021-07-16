@@ -28,28 +28,66 @@ class SetupViewModel @Inject constructor(
     private val _trackees = MutableLiveData<MutableList<User>>(mutableListOf())
     val trackees: LiveData<MutableList<User>> get() = _trackees
 
+    init {
+        viewModelScope.launch {
+            val response = trackerTrackeeService.getTrackeesByTrackerId()
+            if (response.isSuccess()) {
+                val trackees = response.body()!!.message
+                for (trackee in trackees) {
+                    _trackees.value?.add(trackee)
+                }
+                _trackees.value = _trackees.value
+            }
+        }
+    }
+
     /**
      * Add [Trackee] into the list of Trackees [LiveData]
      */
     fun addTrackee(trackeeId: Long) {
+
+
         viewModelScope.launch {
 
             // Verify TrackeeId
             val userResponse = userService.getUserById(trackeeId)
             if (userResponse.isSuccess()) {
 
-                // TODO: Check if record exist
-                val trackee = userResponse.body()!!.message
+                // Check if record exist
+                val queryResponse = trackerTrackeeService.getTrackeesByTrackerId()
+                if (queryResponse.isSuccess()) {
 
-                val response = trackerTrackeeService.addTrackerTrackee(trackeeId)
-                if (response.isSuccess()){
-                    _trackees.value?.add(trackee)
-                    _trackees.value = _trackees.value
-                    _toast.value = "Added Trackee"
+                    // Get Added Trackees
+                    val registeredTrackees = queryResponse.body()!!.message
+
+                    // Check if trackeeId has already been added
+                    val registeredTrackee = registeredTrackees.find { user ->
+                        user.id == trackeeId
+                    }
+                    if (registeredTrackee == null) {
+
+                        // Trackee not added [Add Trackee]
+                        val trackee = userResponse.body()!!.message
+                        val response = trackerTrackeeService.addTrackerTrackee(trackeeId)
+                        if (response.isSuccess()){
+                            _trackees.value?.add(trackee)
+                            _trackees.value = _trackees.value
+                            _toast.value = "Added Trackee"
+                        }
+                        else{
+                            _toast.value = "Error: ${response.body()?.message}"
+                        }
+                    }
+                    else {
+
+                        // Trackee Added
+                        _toast.value = "User already added!"
+                    }
                 }
-                else{
-                    _toast.value = "Error: ${response.body()?.message}"
+                else {
+                    _toast.value = "Error: ${queryResponse.body()?.message}"
                 }
+
             }
             else {
                 _toast.value = "Invalid user please try again or check if the user is registered."
