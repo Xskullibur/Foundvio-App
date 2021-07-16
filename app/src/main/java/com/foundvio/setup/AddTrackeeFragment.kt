@@ -16,23 +16,30 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.foundvio.R
 import com.foundvio.databinding.FragmentAddTrackeeBinding
 import com.foundvio.landing.LandingActivity
+import com.foundvio.model.Trackee
 import com.foundvio.model.User
+import com.foundvio.service.TrackerTrackeeService
+import com.foundvio.utils.isSuccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.ml.scan.HmsScan
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions
+import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
+import javax.inject.Inject
 
 
 class AddTrackeeFragment : Fragment() {
 
     private lateinit var adapter: TrackeeAdapter
+    @Inject lateinit var trackerTrackeeService: TrackerTrackeeService
     private val viewModel: SetupViewModel by activityViewModels()
 
     companion object {
@@ -176,7 +183,12 @@ class AddTrackeeFragment : Fragment() {
 
             trackeeRecyclerView.layoutManager = LinearLayoutManager(this@AddTrackeeFragment.context)
             viewModel.trackees.value?.let {
+
                 adapter = TrackeeAdapter(binding, it)
+                adapter.deleteListener = TrackeeAdapter.DeleteListener {
+                    viewModel.deleteTrackerTrackee(it.id)
+                }
+
                 trackeeRecyclerView.adapter = adapter
                 val itemTouchHelper = ItemTouchHelper(
                     TrackeeAdapter.SwipeToDeleteCallback(
@@ -184,6 +196,7 @@ class AddTrackeeFragment : Fragment() {
                         adapter
                     )
                 )
+
                 itemTouchHelper.attachToRecyclerView(trackeeRecyclerView)
             }
 

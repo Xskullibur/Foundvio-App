@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class TrackeeAdapter(
     private val binding: FragmentAddTrackeeBinding,
-    private var trackees: MutableList<User>
+    private var trackees: MutableList<User>,
 ) : RecyclerView.Adapter<TrackeeAdapter.TrackeeViewHolder>() {
 
     private var recentlyDeletedItem: User? = null
@@ -50,12 +50,20 @@ class TrackeeAdapter(
 
     override fun getItemCount() = trackees.size
 
+    fun interface DeleteListener {
+        fun delete(user: User)
+    }
+
+    var deleteListener: DeleteListener? = null
+
     fun deleteItem(position: Int){
         recentlyDeletedItem = trackees[position]
         recentlyDeletedItemPosition = position
         trackees.removeAt(position)
         notifyItemRemoved(position)
         showUndoSnackBar()
+
+        deleteListener?.delete(recentlyDeletedItem!!)
     }
 
     private fun showUndoSnackBar(){
