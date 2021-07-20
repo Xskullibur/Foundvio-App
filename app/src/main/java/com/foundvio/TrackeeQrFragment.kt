@@ -51,33 +51,23 @@ class TrackeeQrFragment : Fragment() {
         val binding = FragmentTrackeeQrBinding.inflate(inflater)
 
         // Generate QR Code
-        val qrOptions = HmsBuildBitmapOption.Creator().setBitmapBackgroundColor(Color.TRANSPARENT)
-            .setBitmapColor(Color.rgb(0, 135, 135)).setBitmapMargin(1).create()
+
         try {
 
-            lifecycleScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch {
                 val response = userService.userDetails()
                 if (response.isSuccess()) {
 
                     val user = response.body()!!.message
 
                     // Generate QR Bitmap
-                    val qrBitMap = ScanUtil.buildBitmap(
-                        user.id.toString(),
-                        HmsScan.QRCODE_SCAN_TYPE,
-                        720,
-                        720,
-                        qrOptions
-                    )
-                    withContext(Dispatchers.Main) { binding.qrImageview.setImageBitmap(qrBitMap) }
+                    val qrBitMap = generateQRCode(user.id.toString())
+                    // Update QR ImageView UI
+                    binding.qrImageview.setImageBitmap(qrBitMap)
 
-                    // Create File for BitMap
-                    val imagesDir = File(requireContext().cacheDir, "images")
-                    // Create 'images' folder if not exists
-                    if(!imagesDir.exists()){imagesDir.mkdirs()}
-                    val file = File.createTempFile("foundvio", ".png", imagesDir)
+                    val file = createTemporaryImageFile()
 
-                    // Convert Bitmap into ByteArray
+                    // File Bitmap into temporary file
                     qrBitMap.compress(Bitmap.CompressFormat.PNG, 100, file.outputStream())
 
                     // Get Uri from File using FileProvider
@@ -88,31 +78,30 @@ class TrackeeQrFragment : Fragment() {
                     )
 
                     // Update AccountId
-                    withContext(Dispatchers.Main) {
-                        binding.accountId.text = user.id.toString()
-                        // Set onClickListener
-                        binding.materialCardView.setOnClickListener {
+                    binding.accountId.text = user.id.toString()
+                    // Set onClickListener
+                    binding.materialCardView.setOnClickListener {
 
-                            // Create Intent
-                            val sharingIntent = Intent.createChooser(Intent().apply {
-                                action = Intent.ACTION_SEND_MULTIPLE
-                                putExtra(
-                                    Intent.EXTRA_TEXT, "Hey, add me as your " +
-                                            "care-receiver at ${user.id}"
-                                )
+                        // Create Intent
+                        val sharingIntent = Intent.createChooser(Intent().apply {
+                            action = Intent.ACTION_SEND_MULTIPLE
+                            putExtra(
+                                Intent.EXTRA_TEXT, "Hey, add me as your " +
+                                        "care-receiver at ${user.id}"
+                            )
 
-                                data = bitmapUri
-                                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            data = bitmapUri
+                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
 
-                            }, null)
+                        }, null)
 
-                            // Present ShareSheet
-                            startActivity(sharingIntent)
-                        }
+                        // Present ShareSheet
+                        startActivity(sharingIntent)
                     }
-
                 }
+
             }
+
 
         } catch (e: WriterException) {
             Log.w("buildBitmap", e)
@@ -120,4 +109,33 @@ class TrackeeQrFragment : Fragment() {
 
         return binding.root
     }
+
+    suspend fun generateQRCode(content: String) = withContext(Dispatchers.IO) {
+        val qrOptions = HmsBuildBitmapOption.Creator().setBitmapBackgroundColor(Color.TRANSPARENT)
+            .setBitmapColor(Color.rgb(0, 135, 135)).setBitmapMargin(1).create()
+        val qrBitMap = ScanUtil.buildBitmap(
+            content,
+            HmsScan.QRCODE_SCAN_TYPE,
+            720,
+            720,
+            qrOptions
+        )
+        qrBitMap
+    }
+
+    private fun getCacheImageFolder(): File {
+        // Create File for BitMap
+        val imagesDir = File(requireContext().cacheDir, "images")
+        // Create 'images' folder if not exists
+        if (!imagesDir.exists()) {
+            imagesDir.mkdirs()
+        }
+        return imagesDir
+    }
+
+    private suspend fun createTemporaryImageFile() = withContext(Dispatchers.IO) {
+        val imagesDir = getCacheImageFolder()
+        File.createTempFile("foundvio", ".png", imagesDir)
+    }
+
 }
