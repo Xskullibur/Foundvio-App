@@ -84,14 +84,16 @@ class TrackeeQrFragment : Fragment() {
 
                         // Create Intent
                         val sharingIntent = Intent.createChooser(Intent().apply {
-                            action = Intent.ACTION_SEND_MULTIPLE
+                            action = Intent.ACTION_SEND
+                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            type = "*/*"
+
                             putExtra(
                                 Intent.EXTRA_TEXT, "Hey, add me as your " +
                                         "care-receiver at ${user.id}"
                             )
 
-                            data = bitmapUri
-                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            putExtra(Intent.EXTRA_STREAM, bitmapUri)
 
                         }, null)
 
