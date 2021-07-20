@@ -78,13 +78,7 @@ class TrackeeQrFragment : Fragment() {
                     val file = File.createTempFile("foundvio", ".png", imagesDir)
 
                     // Convert Bitmap into ByteArray
-                    ByteArrayOutputStream().use { outputStream ->
-                        qrBitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                        val byteArray = outputStream.toByteArray()
-
-                        // Write ByteArray into File
-                        file.writeBytes(byteArray)
-                    }
+                    qrBitMap.compress(Bitmap.CompressFormat.PNG, 100, file.outputStream())
 
                     // Get Uri from File using FileProvider
                     val bitmapUri = FileProvider.getUriForFile(
