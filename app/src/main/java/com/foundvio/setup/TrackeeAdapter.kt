@@ -50,38 +50,31 @@ class TrackeeAdapter(
 
     override fun getItemCount() = trackees.size
 
+    // Delete Functions
     fun interface DeleteListener {
-        fun delete(user: User)
+        fun delete(user: User, isSuccess: (Boolean) -> Unit)
     }
 
     var deleteListener: DeleteListener? = null
 
     fun deleteItem(position: Int){
+
+        // Get deleted user
         recentlyDeletedItem = trackees[position]
         recentlyDeletedItemPosition = position
-        trackees.removeAt(position)
-        notifyItemRemoved(position)
-        showUndoSnackBar()
 
-        deleteListener?.delete(recentlyDeletedItem!!)
-    }
+        // Delete on server
+        deleteListener?.delete(recentlyDeletedItem!!) { succeed ->
 
-    private fun showUndoSnackBar(){
-        val view = binding.frameContainer
-        val snackbar = Snackbar.make(
-            view, "Undo delete",
-            Snackbar.LENGTH_LONG
-        )
-        snackbar.setAction("Undo") { undoDelete() }
-        snackbar.show()
-    }
+            // Check Server Response
+            if (succeed) {
+                // Delete on client
+                trackees.removeAt(position)
+                notifyItemRemoved(position)
+                showUndoSnackBar()
+            }
+        }
 
-    private fun undoDelete() {
-        trackees.add(
-            recentlyDeletedItemPosition!!,
-            recentlyDeletedItem!!
-        )
-        notifyItemInserted(recentlyDeletedItemPosition!!)
     }
 
     class SwipeToDeleteCallback(
@@ -148,6 +141,29 @@ class TrackeeAdapter(
             background.draw(c)
             icon.draw(c)
         }
+    }
+
+    // Undo Functions
+    fun interface UndoListener {
+        fun undo(user: User)
+    }
+
+    var undoListener: UndoListener? = null
+
+    private fun showUndoSnackBar(){
+        val view = binding.frameContainer
+        val snackbar = Snackbar.make(
+            view, "Undo delete",
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.setAction("Undo") { undoDelete() }
+        snackbar.show()
+    }
+
+    private fun undoDelete() {
+
+        // Undo from server
+        undoListener?.undo(recentlyDeletedItem!!)
     }
 
 }

@@ -45,8 +45,7 @@ class SetupViewModel @Inject constructor(
     /**
      * Add [Trackee] into the list of Trackees [LiveData]
      */
-    fun addTrackee(trackeeId: Long) {
-
+    fun addTrackee(trackeeId: Long, isSuccess: ((Boolean) -> Unit)? = null) {
 
         viewModelScope.launch {
 
@@ -74,24 +73,31 @@ class SetupViewModel @Inject constructor(
                             _trackees.value?.add(trackee)
                             _trackees.value = _trackees.value
                             _toast.value = "Added Trackee"
+
+                            isSuccess?.let { it(true) }
                         }
                         else{
                             _toast.value = "Error: ${response.body()?.message}"
+                            isSuccess?.let { it(false) }
                         }
                     }
                     else {
-
                         // Trackee Added
                         _toast.value = "User already added!"
+                        isSuccess?.let { it(false) }
                     }
                 }
                 else {
+                    // Failed to receive query response
                     _toast.value = "Error: ${queryResponse.body()?.message}"
+                    isSuccess?.let { it(false) }
                 }
 
             }
             else {
+                // Failed to retrieve trackee
                 _toast.value = "Invalid user please try again or check if the user is registered."
+                isSuccess?.let { it(false) }
             }
         }
     }
@@ -99,11 +105,15 @@ class SetupViewModel @Inject constructor(
     /**
      * Delete [Trackee] from trackerTrackee
      */
-    fun deleteTrackerTrackee(trackeeId: Long) {
+    fun deleteTrackerTrackee(trackeeId: Long, isSuccess: ((Boolean) -> Unit)? = null) {
         viewModelScope.launch {
             val response = trackerTrackeeService.removeTrackerTrackee(trackeeId)
             if (response.isError()) {
                 _toast.value = "Error: ${response.body()?.message}"
+                isSuccess?.let { it(false) }
+            }
+            else {
+                isSuccess?.let { it(true) }
             }
         }
     }

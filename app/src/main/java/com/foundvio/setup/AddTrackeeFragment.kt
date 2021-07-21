@@ -185,8 +185,12 @@ class AddTrackeeFragment : Fragment() {
             viewModel.trackees.value?.let {
 
                 adapter = TrackeeAdapter(binding, it)
-                adapter.deleteListener = TrackeeAdapter.DeleteListener {
-                    viewModel.deleteTrackerTrackee(it.id)
+                adapter.deleteListener = TrackeeAdapter.DeleteListener { user, isSuccess ->
+                    viewModel.deleteTrackerTrackee(user.id, isSuccess)
+                }
+
+                adapter.undoListener = TrackeeAdapter.UndoListener { user ->
+                    viewModel.addTrackee(user.id)
                 }
 
                 trackeeRecyclerView.adapter = adapter

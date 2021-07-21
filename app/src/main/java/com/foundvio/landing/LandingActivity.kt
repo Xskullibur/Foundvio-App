@@ -64,7 +64,7 @@ class LandingActivity : AppCompatActivity() {
                         true
                     }
                     R.id.settings_menu -> {
-                        switchFragment(TrackeeQrFragment())
+                        switchFragment(AddTrackeeFragment())
                         true
                     }
                     else -> false
