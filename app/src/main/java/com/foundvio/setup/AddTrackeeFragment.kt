@@ -131,6 +131,7 @@ class AddTrackeeFragment : Fragment() {
 
         viewModel.toast.observe(viewLifecycleOwner) {
             if(it != null)Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearToast()
         }
 
         binding.apply {

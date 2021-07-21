@@ -21,8 +21,15 @@ class SetupViewModel @Inject constructor(
 ): ViewModel() {
 
     //To show toast message
-    private val _toast = MutableLiveData<String>(null)
+    private val _toast = MutableLiveData<String?>(null)
     val toast: LiveData<String?> get() = _toast
+
+    /**
+     * Clear the message inside toast
+     */
+    fun clearToast(){
+        _toast.postValue(null)
+    }
 
     var setupUserDetails = SetupUserDetails()
 
