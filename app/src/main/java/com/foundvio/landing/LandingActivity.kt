@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.foundvio.R
+import com.foundvio.TrackeeQrFragment
 import com.foundvio.databinding.ActivityLandingBinding
 import com.foundvio.service.UserService
 import com.foundvio.setup.AddTrackeeFragment
@@ -63,7 +64,7 @@ class LandingActivity : AppCompatActivity() {
                         true
                     }
                     R.id.settings_menu -> {
-                        switchFragment(AddTrackeeFragment())
+                        switchFragment(TrackeeQrFragment())
                         true
                     }
                     else -> false

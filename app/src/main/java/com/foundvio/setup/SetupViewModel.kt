@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.foundvio.model.User
 import com.foundvio.service.TrackerTrackeeService
+import com.foundvio.utils.isError
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
@@ -20,8 +21,15 @@ class SetupViewModel @Inject constructor(
 ): ViewModel() {
 
     //To show toast message
-    private val _toast = MutableLiveData<String>(null)
+    private val _toast = MutableLiveData<String?>(null)
     val toast: LiveData<String?> get() = _toast
+
+    /**
+     * Clear the message inside toast
+     */
+    fun clearToast(){
+        _toast.postValue(null)
+    }
 
     var setupUserDetails = SetupUserDetails()
 
@@ -91,6 +99,18 @@ class SetupViewModel @Inject constructor(
             }
             else {
                 _toast.value = "Invalid user please try again or check if the user is registered."
+            }
+        }
+    }
+
+    /**
+     * Delete [Trackee] from trackerTrackee
+     */
+    fun deleteTrackerTrackee(trackeeId: Long) {
+        viewModelScope.launch {
+            val response = trackerTrackeeService.removeTrackerTrackee(trackeeId)
+            if (response.isError()) {
+                _toast.value = "Error: ${response.body()?.message}"
             }
         }
     }

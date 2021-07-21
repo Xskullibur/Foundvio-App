@@ -19,4 +19,7 @@ interface TrackerTrackeeService {
 
     @POST("addTrackerTrackee")
     suspend fun addTrackerTrackee(@Body trackeeId: Long): Response<ServerResponse<String>>
+
+    @POST("removeTrackerTrackee")
+    suspend fun removeTrackerTrackee(@Body trackeeId: Long): Response<ServerResponse<String>>
 }
