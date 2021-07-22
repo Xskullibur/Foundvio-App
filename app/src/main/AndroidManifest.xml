@@ -13,6 +13,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <!-- User location permission   -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <application
         android:usesCleartextTraffic="true"
         android:name=".module.FoundvioApplication"
@@ -25,6 +30,9 @@
         <activity
             android:name=".landing.LandingActivity"
             android:exported="true" />
+        <activity
+            android:name=".tracking.TrackingResolutionActivity"
+            android:exported="true" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service android:name=".tracking.TrackeeGeoCoordService" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.foundvio.provider"
